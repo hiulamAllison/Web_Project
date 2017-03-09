@@ -1,0 +1,544 @@
+drop database if exists sportilife;
+
+create database sportilife;
+
+use sportilife;
+
+create table `Customer` (
+	`CustomerID` int(11) NOT NULL,
+	`Gender` varchar(1),
+	`FirstName` varchar(20),
+	`LastName` varchar(20),
+	`EmailAddress` varchar(100),
+	`Balances` float NOT NULL
+);
+
+create table `Login` (
+	`UserName` varchar(20) NOT NULL,
+	`CustomerID` int(11),
+	`Password` varchar(20) NOT NULL
+);
+
+
+CREATE TABLE `address` (
+  `AddressID` int(11),
+  `CustomerID` int(11),
+  `Room` varchar(20),
+  `Building` varchar(100),
+  `Street` varchar(100),
+  `Region` varchar(100),
+  `City` varchar(100),
+  `Country` varchar(100)
+);
+
+CREATE TABLE `inventory` (
+  `ProductID` int(11) NOT NULL,
+  `ProductName` varchar(200) NOT NULL,
+  `Size` varchar(5) NOT NULL,
+  `Description` varchar(500),
+  `Cost` float NOT NULL,
+  `SellPrice` float,
+  `Brand` varchar(20),
+  `Category1` varchar(20),
+  `Category2` varchar(100),
+  `Quantity` int(11)
+);
+
+CREATE TABLE `delivery` (
+  `DeliveryID` int(11) NOT NULL,
+  `DeliveryDate` date DEFAULT NULL,
+  `DeliveryCount` int(11) DEFAULT NULL
+);
+
+CREATE TABLE `orders` (
+  `OrdersID` int(11) NOT NULL,
+  `CustomerID` int(11),
+  `DeliveryID` int(11),
+  `OrdersDate` date,
+  `OrdersStatus` varchar(10)
+);
+
+CREATE TABLE `orderedproduct` (
+  `OrdersID` int(11) NOT NULL,
+  `ProductID` int(11) NOT NULL,
+  `Quantity` int(11) NOT NULL
+);
+
+CREATE TABLE `productimg` (
+  `ProductName` varchar(200),
+  `Img` varchar(500) NOT NULL
+);
+
+CREATE TABLE `UUID`(
+    `Cost` float NOT NULL,
+    `UUID` varchar(36),
+    `Status` varchar(10)
+);
+
+INSERT INTO `address` (`AddressID`, `CustomerID`, `Room`, `Building`, `Street`, `Region`, `City`, `Country`) VALUES
+(1, 1, '14', 'Building 1', 'street 100', 'Shatin', 'Hong Kong', 'China'),
+(2, 2, '9', 'Building E', 'Street ABC', 'Hung Hom', 'Hong Kong', 'China'),
+(3, 3, '18', 'Building XYZ', 'Street NM', 'Central', 'Hong Kong', 'China'),
+(4, 4, '21', 'Building UVW', 'Street IJK', 'Kwun Tong', 'Hong Kong', 'China'),
+(5, 5, '25', 'Building EFG', 'Street RST', 'Chai Wan', 'Hong Kong', 'China');
+
+INSERT INTO `customer` (`CustomerID`, `Gender`, `FirstName`, `LastName`, `EmailAddress`, `Balances`) VALUES
+(1, 'M', 'ABC', 'DEF', 'abc@cba.com', 10000),
+(2, 'M', 'Peter', 'Lee', 'peter.lee@abc.com', 10000),
+(3, 'F', 'Mary', 'Chueng', 'mary.chueng@def.com', 5000),
+(4, 'M', 'Andy', 'Lau', 'andy.lau@ghi.net', 100000),
+(5, 'M', 'Eason', 'Chan', 'eason.chan@xyz.org', 100000);
+
+INSERT INTO `orderedproduct` (`OrdersID`, `ProductID`, `Quantity`) VALUES
+(1, 73, 2),
+(1, 89, 1),
+(2, 96, 5);
+
+INSERT INTO `delivery` (`DeliveryID`, `DeliveryDate`, `DeliveryCount`) VALUES
+(1, '2017-01-01', NULL),
+(2, '2016-12-29', 1),
+(3, '2017-01-12', 1),
+(4, '2017-02-15', NULL);
+
+INSERT INTO `login` (`UserName`, `CustomerID`, `Password`) VALUES
+('abc.cba', 1, '123456'),
+('andy.lau', 4, 'zxcvbn'),
+('eason.chan', 5, '654321'),
+('mary.chueng', 3, 'asdfgh'),
+('peter.lee', 2, 'qwerty');
+
+INSERT INTO `orders` (`OrdersID`, `CustomerID`, `DeliveryID`, `OrdersDate`, `OrdersStatus`) VALUES
+(1, 1, 2, '2016-11-16', 'non-pay'),
+(2, 1, 3, '2016-11-26', 'processing');
+
+INSERT INTO `productimg` (`ProductName`, `Img`) VALUES
+('TECH FIT BASE TEE', 'Inventory\\base_layer\\AK2822_01_laydown.jpg'),
+('YB TF BASE TEE', 'Inventory\\base_layer\\AK2823_01_laydown.jpg'),
+('NIKE PRO COOL', 'Inventory\\base_layer\\703088-010_BL1.png'),
+('NIKE PRO HYPERWARM', 'Inventory\\base_layer\\826600-012_BL1.png'),
+('NIKE PRO HYPERWARM FADE', 'Inventory\\base_layer\\803133-524_BL1.png'),
+('Men UA HeatGearr Armour Long Sleeve Compression Shirt', 'Inventory\\base_layer\\14690805409791990_615X650.png'),
+('Men UA HeatGearr Armour Graphic Short Sleeve Compression Shirt', 'Inventory\\base_layer\\14690091284236109_615X650.png'),
+('JORDAN 23 TECH', 'Inventory\\base_layer\\802190-032_BL1.png'),
+('APPLE WATCH NIKE (38MM)', 'Inventory\\equipment\\AP0007-050_BL1.png'),
+('NIKE SPORTSWEAR TRUE TECH', 'Inventory\\equipment\\803718-423_BL1.png'),
+('JORDAN SPORTSWEAR TOP-LOADING', 'Inventory\\equipment\\BA8054-010_BL1.png'),
+('JORDAN LEGACY', 'Inventory\\equipment\\BB0472-824_BL1.png'),
+('Men UA Performance Headband', 'Inventory\\equipment\\14525959791952768_615X650.png'),
+('NIKE CHALLENGER', 'Inventory\\equipment\\AC3892-050_BL1.png'),
+('NIKE HOOPS ELITE BASKETBALL', 'Inventory\\equipment\\BA5342-410_BL1.png'),
+('NIKE VERSA TACK', 'Inventory\\equipment\\BB0434-410_BL1.png'),
+('UA Storm Undeniable II MD Duffle', 'Inventory\\equipment\\14763235691888570_615X650.png'),
+('KYRIE ELITE PULLOVER', 'Inventory\\hoodies&pullovers\\800090-032_BL1.png'),
+('NIKE THERMA HYPER ELITE', 'Inventory\\hoodies&pullovers\\800038-010_BL1.png'),
+('NIKE DRY ELEMENT', 'Inventory\\hoodies&pullovers\\685819-533_BL1.png'),
+('JORDAN JETER RE2PECT PULLOVER', 'Inventory\\hoodies&pullovers\\828554-419_BL1.png'),
+('Men UA SC30 Top Gun II Hoodie', 'Inventory\\hoodies&pullovers\\14737384004144749_615X650.png'),
+('Men UA Sportstyle Anorak', 'Inventory\\hoodies&pullovers\\1471335368135589_320X390.png'),
+('JORDAN LIFESTYLE HOODED DOWN', 'Inventory\\jackets&vests\\807952-010_BL1.png'),
+('NIKE IMPOSSIBLY LIGHT', 'Inventory\\jackets&vests\\719768-100_BL1.png'),
+('NIKELAB GYAKUSOU PACKABLE JACKET', 'Inventory\\jackets&vests\\842802-400_BL1.png'),
+('NIKE TECH KNIT WINDRUNNER', 'Inventory\\jackets&vests\\728686-043_BL1.png'),
+('NIKECOURT WOVEN', 'Inventory\\jackets&vests\\644775-010_BL1.png'),
+('LIGHT DOWN JACKET', 'Inventory\\jackets&vests\\AA1370_21_model.jpg'),
+('Women''s UA ColdGearr Infrared Kymera Jacket', 'Inventory\\jackets&vests\\14792950327006756_615X650.png'),
+('Women''s UA Mirror Printed Leggings', 'Inventory\\pants&tights\\14619200270012415_615X650.png'),
+('Men UA HeatGearr Armour Scope Compression Leggings', 'Inventory\\pants&tights\\14623503226073794_615X650.png'),
+('JORDAN AJ COMPRESSION THREE-QUARTER', 'Inventory\\pants&tights\\814656-065_BL1.png'),
+('JORDAN SEASONAL', 'Inventory\\pants&tights\\845388-687_BL1.png'),
+('NIKE DRY SQUAD', 'Inventory\\pants&tights\\807685-011_BL1.png'),
+('NIKE FLEX KD', 'Inventory\\pants&tights\\803876-032_BL1.png'),
+('ESS 3S WV PANT', 'Inventory\\pants&tights\\S17891_01_laydown.jpg'),
+('NIKE POWER LEGENDARY 2', 'Inventory\\pants&tights\\803432-010_BL1.png'),
+('AIR JORDAN 9 RETRO', 'Inventory\\shoes\\302370-121_BL1.png'),
+('NIKE LUNAREPIC LOW FLYKNIT', 'Inventory\\shoes\\843765-500_BL1.png'),
+('NIKE SOCK DART SE PREMIUM', 'Inventory\\shoes\\859553-001_BL1.png'),
+('NIKE ROSHE TWO', 'Inventory\\shoes\\844656-003_BL1.png'),
+('ENERGY BOOST 3 SHOES', 'Inventory\\shoes\\adidas-energy-boost-3-womens.jpg'),
+('Women''s UA SpeedForm Fortis 2 TXTR Running Shoes', 'Inventory\\shoes\\14785824877739978_615X650.png'),
+('AIR JORDAN 1 BANNED', 'Inventory\\tops&tshirts\\842244-100_BL1.png'),
+('NIKE INTERNATIONAL SEASONAL', 'Inventory\\tops&tshirts\\803951-010_BL1.png'),
+('NIKE KOBE XXIV', 'Inventory\\tops&tshirts\\806733-657_BL1.png'),
+('NIKE SPORTSWEAR', 'Inventory\\tops&tshirts\\805248-423_BL1.png'),
+('NIKE SPORTSWEAR SIGNAL', 'Inventory\\tops&tshirts\\843557-524_BL1.png'),
+('NIKE STRIKE AEROSWIFT', 'Inventory\\tops&tshirts\\807035-065_BL1.png'),
+('HOODED JOGGER TRACK SUIT', 'Inventory\\tracksuits\\AJ6284_21_model.jpg'),
+('SEPARATES TRACK SUIT', 'Inventory\\tracksuits\\AK2025_21_model.jpg'),
+('ESSENTIALS TRACK SUIT', 'Inventory\\tracksuits\\S22586_01_laydown.jpg'),
+('TIGHTS-AND-HOODIE TRACK SUIT', 'Inventory\\tracksuits\\AJ5961_21_model.jpg'),
+('INF DY NEMO 1PC', 'Inventory\\swimwear\\AJ7788_01_laydown.jpg'),
+('I 3S TANK', 'Inventory\\swimwear\\S22915_21_model.jpg'),
+('AQUASTORM 1PC', 'Inventory\\swim_accessories\\AJ8400_01_standard.jpg'),
+('EEZAY MARBLED W', 'Inventory\\swim_accessories\\S80427_01_standard.jpg'),
+('X16 SLIDE', 'Inventory\\swim_accessories\\AQ5912_01_standard.jpg'),
+('RB BRA PRINT 3', 'Inventory\\sports_bras\\AY8513_01_laydown.jpg'),
+('NIKE DRY SQUAD CREW', 'Inventory\\socks\\SX5345-010_BL1.png'),
+('NIKE SHOE PARADISE CREW', 'Inventory\\socks\\SX5688-900_BL1.png'),
+('JORDAN JUMPMAN FLIGHT CREW', 'Inventory\\socks\\642210-687_BL1.png'),
+('NIKECOURT PURE', 'Inventory\\skirts&dresses\\728778-702_BL1.png'),
+('NIKECOURT FLEX VICTORY', 'Inventory\\skirts&dresses\\801620-525_BL1.png'),
+('NIKE ELITE', 'Inventory\\shorts\\776120-100_BL1.png'),
+('NIKE DRY TEMPO', 'Inventory\\shorts\\805574-012_BL1.png'),
+('JORDAN 23 LUX', 'Inventory\\shorts\\812587-464_BL1.png'),
+('BACK-TO-SCHOOL TRACK SUIT', 'Inventory\\tracksuits\\AB7447_21_model.jpg'),
+('RIBERIO TRACK SUIT', 'Inventory\\tracksuits\\S22613_21_model.jpg'),
+('LIN YG BX', 'Inventory\\swimwear\\AJ8377_21_model.jpg'),
+('GRAPHIC SWIMSUIT', 'Inventory\\swimwear\\S93068_21_model.jpg'),
+('BEACH VOLLEYBALL WATER SHORTS', 'Inventory\\swimwear\\AJ7950_21_model.jpg'),
+('ALLOVER PRINT BIKINI', 'Inventory\\swimwear\\AJ7946_21_model.jpg'),
+('HYDROPASSION GOGGLES', 'Inventory\\swim_accessories\\AB6095_01_standard.jpg'),
+('AQUASTORM GOGGLES', 'Inventory\\swim_accessories\\V86947_01_standard.jpg'),
+('ADIDAS SWIM KIDS PACKAGE', 'Inventory\\swim_accessories\\AB6071_01_standard.jpg'),
+('JORDAN ICE CREAM PACK', 'Inventory\\socks\\806409-100_BL1.png'),
+('NIKE CUSHION DYNAMIC ARCH NO-SHOW', 'Inventory\\socks\\SX4750-142_BL1.png'),
+('NIKE ELITE LIGHTWEIGHT NO-SHOW TAB', 'Inventory\\socks\\SX5193-702_BL1.png'),
+('NIKE PRO RIVAL RACERBACK', 'Inventory\\sports_bras\\833288-351_BL1.png'),
+('NIKE PRO HYPER CLASSIC PADDED', 'Inventory\\sports_bras\\864961-702_BL1.png'),
+('NIKE PRO RIVAL', 'Inventory\\sports_bras\\805553-455_BL1.png');
+
+INSERT INTO `inventory` (`ProductID`, `ProductName`, `Size`, `Description`, `Cost`, `SellPrice`, `Brand`, `Category1`, `Category2`, `Quantity`) VALUES
+(49, 'TECH FIT BASE TEE', 'M', 'You pour everything into your workout. This junior boys'' training t-shirt helps you get more out. Its climaliter fabric hugs your body with a fitted fit, pulling sweat away from your skin and blocking sun with a 50+ UPF rating.', 150, 300, 'Adidas', 'Children', 'Base_Layer', 20),
+(50, 'YB TF BASE TEE', 'L', 'You pour everything into your workout. This junior boys'' training t-shirt helps you get more out. Its climaliter fabric hugs your body with a fitted fit, pulling sweat away from your skin and blocking sun with a 50+ UPF rating.', 220, 380, 'Adidas', 'Men', 'Base_Layer', 20),
+(51, 'NIKE PRO COOL', 'S', 'The Nike Pro Cool Men''s Long Sleeve Training Top provides a comfortable, locked-in fit at practice and on game day with stretch sweat-wicking fabric and mesh panels.', 180, 249, 'Nike', 'Men', 'Base_Layer', 20),
+(52, 'NIKE PRO HYPERWARM', 'M', 'The Nike Pro HyperWarm Men''s Long Sleeve Training Top features sweat-wicking fabric and targeted ventilation in a compressive design for lasting comfort in cool conditions.', 220, 399, 'Nike', 'Men', 'Base_Layer', 20),
+(53, 'NIKE PRO HYPERWARM FADE', 'S', 'The Nike Pro Hyperwarm Fade Women''s Training Top features mesh underarm insets and thermal, sweat-wicking fabric for breathability and warmth during cool-weather workouts.', 320, 549, 'Nike', 'Women', 'Base_Layer', 20),
+(54, 'Men UA HeatGearr Armour Long Sleeve Compression Shirt', 'S', 'HeatGearr fabric, with all the benefits of UA Compression, comfortable enough to be worn all day.', 230, 349, 'Under Armour', 'Men', 'Base_Layer', 19),
+(55, 'Men UA HeatGearr Armour Graphic Short Sleeve Compression Shirt', 'S', 'HeatGearr fabric, with all the benefits of UA Compression, comfortable enough to be worn all day.', 322, 349, 'Under Armour', 'Men', 'Base_Layer', 20),
+(56, 'JORDAN 23 TECH', 'S', 'The Jordan 23 Tech Men''s Tank is made with light, stretchy fabric for premium comfort and side vents for natural mobility.', 120, 299, 'Nike', 'Men', 'Base_Layer', 20),
+(57, 'APPLE WATCH NIKE (38MM)', 'N/A', 'Introducing the Apple Watch Nike+ (38mm) Running Watch, your perfect running partner. Featuring built-in GPS to track your runs, a bold and easy-to-read face, and a lightweight, breathable band for comfort on the run.', 2000, 2888, 'Nike', NULL, 'Equipment', 19),
+(58, 'NIKE SPORTSWEAR TRUE TECH', 'N/A', 'The Nike Sportswear True Tech Hat is crafted from a blend of Tech Knit and Tech Fleece fabrics for lightweight warmth.', 50, 199, 'Nike', NULL, 'Equipment', 20),
+(59, 'JORDAN SPORTSWEAR TOP-LOADING', 'N/A', 'The Jordan Sportswear Top-Loading Backpack has a spot for all your essentials and features multiple carrying options for versatility on the go.', 329, 699, 'Nike', NULL, 'Equipment', 20),
+(60, 'JORDAN LEGACY', 'N/A', 'The Jordan Legacy Men''s Basketball (Size 7) delivers the durability and grip players need to hit the blacktop with confidence. The wider channels and pebbled pattern allow for precision ball handling and quick-release shots.', 150, 259, 'Nike', NULL, 'Equipment', 20),
+(61, 'Men UA Performance Headband', 'N/A', 'Headband/sweatband constructed in multi-channel performance fibers.', 20, 49, 'Under Armour', NULL, 'Equipment', 20),
+(62, 'NIKE CHALLENGER', 'N/A', 'The Nike Challenger Arm Band features a clear, durable window to keep your phone accessible and protected during your workout.', 120, 299, 'Nike', NULL, 'Equipment', 20),
+(63, 'NIKE HOOPS ELITE BASKETBALL', 'N/A', 'The Nike Hoops Elite Basketball Gym Sack offers organized on-the-go storage with a large main compartment and exterior zip pocket.', 60, 149, 'Nike', NULL, 'Equipment', 20),
+(64, 'NIKE VERSA TACK', 'N/A', 'The Nike Versa Tack Men''s Basketball (Size 7) features a textured surface like an indoor ball but is durable enough for outdoor play.', 80, 129, 'Nike', NULL, 'Equipment', 20),
+(65, 'UA Storm Undeniable II MD Duffle', 'N/A', 'Large vented pocket for laundry or shoes, additional large zippered pocket & one mesh pocket.', 231, 449, 'Under Armour', NULL, 'Equipment', 20),
+(66, 'KYRIE ELITE PULLOVER', 'L', 'The Kyrie Elite Pullover Men''s Basketball Hoodie is made with thermal sweat-wicking fabric to help keep you warm and comfortable on the outdoor court. A dropped back hem enhances coverage, and ergonomic seams let you move naturally.', 310, 599, 'Nike', 'Men', 'Hoodies_and_Pullovers', 20),
+(67, 'NIKE THERMA HYPER ELITE', 'S', 'The Nike Therma Hyper Elite Men''s Basketball Hoodie features thermal fabric with a water-repellent finish for breathable performance comfort on the outdoor court.', 321, 599, 'Nike', 'Men', 'Hoodies_and_Pullovers', 20),
+(69, 'NIKE DRY ELEMENT', 'S', 'The Nike Dry Element Women''s Running Hoodie is designed with soft Dri-FIT fabric for incredible comfort and lasting warmth. Ergonomic seams help keep you moving naturally while you run.', 330, 499, 'Nike', 'Women', 'Hoodies_and_Pullovers', 20),
+(70, 'JORDAN JETER RE2PECT PULLOVER', 'S', 'The Jordan Jeter Re2pect Pullover Men''s Hoodie is designed with raglan sleeves and a soft cotton blend for natural range of motion and warmth.', 335, 499, 'Nike', 'Men', 'Hoodies_and_Pullovers', 20),
+(71, 'Men UA SC30 Top Gun II Hoodie', 'S', 'Midweight, durable cotton-blend fleece.', 460, 699, 'Under Armour', 'Men', 'Hoodies_and_Pullovers', 20),
+(72, 'Men UA Sportstyle Anorak', 'S', 'UA Storm technology repels water without sacrificing breathability.', 430, 699, 'Under Armour', 'Men', 'Hoodies_and_Pullovers', 20),
+(73, 'JORDAN LIFESTYLE HOODED DOWN', 'S', 'The Jordan Lifestyle Hooded Down Men''s Jacket features down fill for premium warmth and water-repellent fabric for protection from the elements.', 1099, 1699, 'Nike', 'Men', 'Jackets_and_Vests', 20),
+(74, 'NIKE IMPOSSIBLY LIGHT', 'S', 'The Nike Impossibly Light Women''s Running Jacket is updated with nylon fabric that''s backed with acrylic for even greater resistance to wind and rain. The jacket packs into a pocket so you can shed it on the go.\r\n', 345, 599, 'Nike', 'Women', 'Jackets_and_Vests', 20),
+(75, 'NIKELAB GYAKUSOU PACKABLE JACKET', 'S', 'The NikeLab Gyakusou Packable Women''s Running Jacket keeps you dry and moving freely with an ultra-lightweight design. A reflective print on each arm represents the distinct tattoos of Undercover founder and Gyakusou designer Jun Takahashi for a personal touch to this running staple.', 999, 1499, 'Nike', 'Women', 'Jackets_and_Vests', 20),
+(76, 'NIKE TECH KNIT WINDRUNNER', 'S', 'The Nike Tech Knit Windrunner Men''s Jacket reinvents the iconic track jacket with new Nike Tech Knit, an engineered, body-mapped fabric that delivers superior fit plus warmth and ventilation exactly where you need it for all-day comfort.', 1059, 1499, 'Nike', 'Men', 'Jackets_and_Vests', 20),
+(77, 'NIKECOURT WOVEN', 'S', 'The NikeCourt Woven Men''s Tennis Jacket is made with a mesh lining and back vent for increased airflow on the court. ', 222, 499, 'Nike', 'Men', 'Jackets_and_Vests', 20),
+(78, 'LIGHT DOWN JACKET', 'S', 'This lightweight men''s training jacket is built for cooler weather. Filled with cosy duck down to keep you warm, this jacket packs into a small pouch for easy transport. Features reflective details.', 389, 659, 'Adidas', 'Men', 'Jackets_and_Vests', 20),
+(79, 'Women''s UA ColdGearr Infrared Kymera Jacket', 'S', 'UA Storm technology repels water without sacrificing breathability.', 1299, 2699, 'Under Armour', 'Women', 'Jackets_and_Vests', 20),
+(80, 'Women''s UA Mirror Printed Leggings', 'M', 'UA StudioLux fabric delivers relentless support with a super-soft luxurious feel.', 439, 749, 'Under Armour', 'Women', 'Pants_and_Tights', 20),
+(81, 'Men UA HeatGearr Armour Scope Compression Leggings', 'S', 'HeatGearr fabric, with all the benefits of UA Compression, comfortable enough to be worn all day.', 230, 499, 'Under Armour', 'Men', 'Pants_and_Tights', 20),
+(82, 'JORDAN AJ COMPRESSION THREE-QUARTER', 'S', 'The Jordan AJ Compression Three-Quarter Men''s Training Tights are made with tight-fitting, Dri-FIT fabric that moves with you for locked-in comfort and superb range of motion.', 170, 349, 'Nike', 'Men', 'Pants_and_Tights', 20),
+(83, 'JORDAN SEASONAL', 'M', 'SIZE QTY (1) ADD TO CARTCHECK OUT\r\nThe Jordan Seasonal Men''s Graphic Pants are made with soft French terry fabric for lightweight warmth.', 239, 499, 'Nike', 'Men', 'Pants_and_Tights', 20),
+(85, 'NIKE DRY SQUAD', 'S', 'The Nike Dry Squad Men''s Soccer Pants are designed for superb mobility and ease during practice and drills.', 125, 399, 'Nike', 'Men', 'Pants_and_Tights', 20),
+(86, 'NIKE FLEX KD', 'L', 'The Nike Flex KD Big Kids'' (Boys'') Basketball Pants feature a water-repellent finish on stretchy sweat-wicking fabric to help keep you dry and moving naturally on the court.', 142, 399, 'Nike', 'Children', 'Pants_and_Tights', 20),
+(87, 'ESS 3S WV PANT', 'M', 'ESS 3S WV PANT', 213, 399, 'Adidas', 'Men', 'Pants_and_Tights2', 20),
+(88, 'NIKE POWER LEGENDARY 2', 'M', 'The Nike Pro HyperWarm Women''s Training Tights feature warm, stretchy knit fabric that hugs your legs from hip to hem for a supportive, flattering fit.', 335, 699, 'Nike', 'Women', 'Pants_and_Tights', 20),
+(89, 'AIR JORDAN 9 RETRO', '8', 'Originally released in 1993, when everyone around the world wanted to be like Mike, the AJ 9 represented the globalization of the Air Jordan brand. Today, the Air Jordan 9 Retro Men''s Shoe honors MJ as an international icon with design details from around the world, along with the superior cushioning and comfort fans have come to expect from signature Jordan...', 878, 1399, 'NIke', 'Men', 'Shoes', 20),
+(90, 'NIKE LUNAREPIC LOW FLYKNIT', '8', 'The Nike LunarEpic Low Flyknit Women''s Running Shoe is lightweight and breathable with targeted cushioning for a soft, effortless sensation underfoot.', 989, 1299, 'Nike', 'Women', 'Shoes', 20),
+(91, 'NIKE SOCK DART SE PREMIUM', '8', 'The Nike Sock Dart SE Premium Men''s Shoe takes a minimalist approach with a stretchy, lightweight woven upper designed for a comfortable feel and a streamlined look.', 598, 899, 'Nike', 'Men', 'Shoes', 20),
+(92, 'NIKE ROSHE TWO', '8', 'As light and flexible as the original, the Nike Roshe Two Men''s Shoe features triple-layer cushioning for a soft underfoot feel and a breathable, stretchy upper that conforms to your foot for a custom fit.', 454, 649, 'Nike', 'Men', 'Shoes', 20),
+(93, 'ENERGY BOOST 3 SHOES', '8', 'The shoes that redefined cushioning when they launched. These women''s shoes blend a flexible, adaptive techfitr upper with the plush, energy-filled ride of boostT. The result is a lightweight, neutral running shoe that will invigorate runners of every level, at any distance.', 572, 799, 'Adidas', 'Women', 'Shoes', 20),
+(94, 'Women''s UA SpeedForm Fortis 2 TXTR Running Shoes', '8', 'Innovative UA SpeedForm technology delivers an unprecedented precision fit for unrivaled comfort & zero distraction.', 786, 999, 'Under Armour', 'Women', 'Shoes', 20),
+(95, 'AIR JORDAN 1 BANNED', 'S', 'The Air Jordan 1 Banned Men''s T-Shirt is made with sweat-wicking fabric for lasting comfort.', 125, 269, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(96, 'NIKE INTERNATIONAL SEASONAL', 'S', 'The Nike International Seasonal Men''s T-Shirt features allover print of Brazil at night on pure cotton for a premium look and comfortable feel.', 119, 229, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(97, 'NIKE KOBE XXIV', 'S', 'The Nike Kobe XXIV Men''s Basketball T-Shirt honors an icon of the sport with signature graphics on soft Dri-FIT fabric.', 119, 269, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(98, 'NIKE SPORTSWEAR', 'S', 'The Nike Sportswear Women''s Long Sleeve Top features an elongated silhouette for comfortable coverage.', 109, 299, 'Nike', 'Women', 'Tops_and_T-shirts', 20),
+(99, 'NIKE SPORTSWEAR SIGNAL', 'S', 'The Nike Sportswear Signal Women''s Top features graphics from Brooklyn artist Romon "Rostarr" Yang on super-soft cotton for total comfort.', 105, 229, 'Nike', 'Women', 'Tops_and_T-shirts', 20),
+(100, 'NIKE STRIKE AEROSWIFT', 'S', 'The ultralight Nike Strike Aeroswift Men''s 1/4 Zip Soccer Drill Top features Aeroswift technology, combining meticulous tailoring and the latest soccer innovations, helping you train comfortably at full speed.', 559, 899, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(101, 'HOODED JOGGER TRACK SUIT', 'S', 'This men''s training suit keeps your muscles warm while you work out or wind down. Made with an ultra-comfy French terry construction, the suit has a regular fit, and the hoodie features roomy kangaroo pockets.', 239, 389, 'Adidas', 'Men', 'Tracksuits', 20),
+(102, 'SEPARATES TRACK SUIT', 'S', 'Hit the gym or field in this cosy, slim-fit track suit. It''s made of soft French terry designed to block the sun during training.', 499, 739, 'Adidas', 'Children', 'Tracksuits', 20),
+(103, 'ESSENTIALS TRACK SUIT', 'S', 'Two versatile adidas pieces, one winning athletic look. This kids'' Essentials Track Suit brings little ones a grown-up style, with contrasting 3-Stripes that coordinate the track pants with the full-zip track jacket.', 459, 699, 'Adidas', 'Children', 'Tracksuits', 20),
+(104, 'TIGHTS-AND-HOODIE TRACK SUIT', 'S', 'A comfortable, colour-coordinated suit to get you to and from the gym. Made with moisture-wicking performance fabric, this women''s track suit draws sweat away from your skin to keep you comfortable. The jacket is cut for a feminine look, with slightly batwing sleeves.', 389, 599, 'Adidas', 'Women', 'Tracksuits', 20),
+(105, 'LIN YG BX', 'S', 'Laps in the pool await. These swim boxers for men are made in high-stretch, chlorine-resistant INFINITEXr DRIVE that''s soft and comfortable in and out of the pool. They have a secure tie-cord waist and wear close for less drag in the water.', 119, 250, 'Adidas', 'Men', 'Swimwear', 20),
+(106, 'INF DY NEMO 1PC', 'S', 'Little girls will enjoy endless fun in the water or sun with this infants'' one-piece swimsuit. Designed with a flat neckline and thin shoulder straps, the front features a printed graphic depicting Disney''s popular underwater movie character, Dory.', 88, 139, 'Adidas', 'Children', 'Swimwear', 20),
+(107, 'I 3S TANK', 'S', 'This women''s swimsuit combines support with a streamlined fit for serious training. The tankini has an inner mesh bra and is made of chlorine-resistant INFINITEXr fabric that keeps its elasticity and fit. With crisscross straps in back, a low neck and medium-cut legs for comfort and performance.', 109, 235, 'Adidas', 'Women', 'Swimwear', 20),
+(108, 'AQUASTORM 1PC', 'N/A', 'Train in comfort wearing the adidas Aquastorm One-Piece Goggles. The adjustable strap and nosepiece ensure these swim goggles fit right and stay put, no matter how intense your water workouts get.', 80, 140, 'Adidas', NULL, 'Swim_Accessories', 20),
+(109, 'EEZAY MARBLED W', 'N/A', 'Ready for the beach or the pool, these women''s thongs are made for the easy days of summer. Lightweight and soft, they feature a colourful marble graphic on top and slip-on-and-go thongs construction.', 59, 139, 'Adidas', 'Women', 'Swim_Accessories', 20),
+(110, 'X16 SLIDE', 'N/A', 'Pass, attack, shoot. After working hard on the pitch, slip into these men''s slides to help your feet recover. Inspired by the look of the adidas X football boot, these slip-on sandals let your feet relax before and after the match.', 59, 129, 'Adidas', 'Men', 'Swim_Accessories', 20),
+(111, 'NIKE PRO HYPER CLASSIC PADDED', 'S', 'Designed for medium-impact activities like cycling, dance and cardio classes, the Nike Pro Hyper Classic Padded Women''s Medium Support Sports Bra lets you move freely while helping you feel secure and supported.', 119, 399, 'Nike', 'Women', 'Sports_Bras', 20),
+(112, 'NIKE PRO RIVAL', 'S', 'The Nike Pro Rival Women''s High Support Sports Bra features a compression fit and knit fabric that reduces bounce during high-impact workouts like running, basketball and dance.', 189, 449, 'Nike', 'Women', 'Sports_Bras', 20),
+(113, 'RB BRA PRINT 3', 'S', 'Fear no treadmill with this sports bra. With a maximum-support design for high-impact training, it has inner foam pads for extra shape, coverage and support. Made with recycled fibres, the bra features ventilating climacoolr and a mesh back that keep you cool and dry.', 149, 399, 'Adidas', 'Women', 'Sports_Bras', 20),
+(114, 'NIKE DRY SQUAD CREW', 'S', 'The Nike Dry Squad Crew Soccer Socks are made with sweat-wicking Dri-FIT fabric and zonal cushioning to provide performance comfort and impact protection on the field.', 29, 89, 'Nike', NULL, 'Socks', 20),
+(115, 'NIKE SHOE PARADISE CREW', 'S', 'The Nike Shoe Paradise Crew Basketball Socks (1 Pair) feature engineered yarn for optimal traction and zonal cushioning for performance comfort on the court.\r\n', 39, 109, 'Nike', NULL, 'Socks', 20),
+(116, 'JORDAN JUMPMAN FLIGHT CREW', 'S', 'The Jordan Jumpman Flight Crew Socks are made with Dri-FIT fabric and ventilated mesh to help keep your feet cool and dry. Zonal cushioning provides plush comfort and impact protection.', 49, 109, 'Nike', NULL, 'Socks', 20),
+(117, 'NIKECOURT PURE', 'S', 'The NikeCourt Pure Women''s Tennis Skirt is designed to help you move freely on the court with stretchy built-in shorts and super-soft Dri-FIT fabric.', 109, 259, 'Nike', 'Women', 'Skirts_and_Dresses', 20),
+(118, 'NIKECOURT FLEX VICTORY', 'S', 'The NikeCourt Flex Victory Women''s Tennis Skirt is made with stretchy, sweat-wicking fabric in a classic pleated profile to help keep you moving freely on the court.', 159, 499, 'Nike', 'Women', 'Skirts_and_Dresses', 20),
+(119, 'NIKE ELITE', 'S', 'The Nike Elite Men''s Basketball Shorts help keep you dry, comfortable and moving freely on the court with sweat-wicking fabric and vented hems.', 89, 299, 'NIke', 'Men', 'Shorts', 20),
+(120, 'NIKE DRY TEMPO', 'S', 'The Nike Dry Tempo Big Kids'' (Girls'') Running Shorts combine mesh side insets with a curved hem for breathability and range of motion for all-day comfort.', 89, 179, 'Nike', 'Children', 'Shorts', 20),
+(121, 'JORDAN 23 LUX', 'S', 'The Jordan 23 Lux Men''s Shorts combine soft jersey fabric and a wide elastic waistband for a comfortable fit that stays in place.', 299, 529, 'Nike', 'Men', 'Shorts', 20),
+(122, 'TECH FIT BASE TEE', 'S', 'You pour everything into your workout. This junior boys'' training t-shirt helps you get more out. Its climaliter fabric hugs your body with a fitted fit, pulling sweat away from your skin and blocking sun with a 50+ UPF rating.', 150, 300, 'Adidas', 'Children', 'Base_Layer', 10),
+(123, 'TECH FIT BASE TEE', 'L', 'You pour everything into your workout. This junior boys'' training t-shirt helps you get more out. Its climaliter fabric hugs your body with a fitted fit, pulling sweat away from your skin and blocking sun with a 50+ UPF rating.', 150, 300, 'Adidas', 'Children', 'Base_Layer', 5),
+(124, 'YB TF BASE TEE', 'M', 'You pour everything into your workout. This junior boys'' training t-shirt helps you get more out. Its climaliter fabric hugs your body with a fitted fit, pulling sweat away from your skin and blocking sun with a 50+ UPF rating.', 220, 380, 'Adidas', 'Men', 'Base_Layer', 2),
+(125, 'YB TF BASE TEE', 'S', 'You pour everything into your workout. This junior boys'' training t-shirt helps you get more out. Its climaliter fabric hugs your body with a fitted fit, pulling sweat away from your skin and blocking sun with a 50+ UPF rating.', 220, 380, 'Adidas', 'Men', 'Base_Layer', 12),
+(126, 'NIKE PRO COOL', 'M', 'The Nike Pro Cool Men''s Long Sleeve Training Top provides a comfortable, locked-in fit at practice and on game day with stretch sweat-wicking fabric and mesh panels.', 180, 249, 'Nike', 'Men', 'Base_Layer', 10),
+(127, 'NIKE PRO COOL', 'L', 'The Nike Pro Cool Men''s Long Sleeve Training Top provides a comfortable, locked-in fit at practice and on game day with stretch sweat-wicking fabric and mesh panels.', 180, 249, 'Nike', 'Men', 'Base_Layer', 16),
+(128, 'NIKE PRO HYPERWARM', 'L', 'The Nike Pro HyperWarm Men''s Long Sleeve Training Top features sweat-wicking fabric and targeted ventilation in a compressive design for lasting comfort in cool conditions.', 220, 399, 'Nike', 'Men', 'Base_Layer', 20),
+(129, 'NIKE PRO HYPERWARM', 'S', 'The Nike Pro HyperWarm Men''s Long Sleeve Training Top features sweat-wicking fabric and targeted ventilation in a compressive design for lasting comfort in cool conditions.', 220, 399, 'Nike', 'Men', 'Base_Layer', 20),
+(130, 'NIKE PRO HYPERWARM FADE', 'L', 'The Nike Pro Hyperwarm Fade Women''s Training Top features mesh underarm insets and thermal, sweat-wicking fabric for breathability and warmth during cool-weather workouts.', 320, 549, 'Nike', 'Women', 'Base_Layer', 20),
+(131, 'NIKE PRO HYPERWARM FADE', 'M', 'The Nike Pro Hyperwarm Fade Women''s Training Top features mesh underarm insets and thermal, sweat-wicking fabric for breathability and warmth during cool-weather workouts.', 320, 549, 'Nike', 'Women', 'Base_Layer', 20),
+(132, 'Men UA HeatGearr Armour Long Sleeve Compression Shirt', 'M', 'HeatGearr fabric, with all the benefits of UA Compression, comfortable enough to be worn all day.', 230, 349, 'Under Armour', 'Men', 'Base_Layer', 20),
+(133, 'Men UA HeatGearr Armour Long Sleeve Compression Shirt', 'L', 'HeatGearr fabric, with all the benefits of UA Compression, comfortable enough to be worn all day.', 230, 349, 'Under Armour', 'Men', 'Base_Layer', 20),
+(134, 'Men UA HeatGearr Armour Graphic Short Sleeve Compression Shirt', 'M', 'HeatGearr fabric, with all the benefits of UA Compression, comfortable enough to be worn all day.', 322, 349, 'Under Armour', 'Men', 'Base_Layer', 20),
+(135, 'Men UA HeatGearr Armour Graphic Short Sleeve Compression Shirt', 'L', 'HeatGearr fabric, with all the benefits of UA Compression, comfortable enough to be worn all day.', 322, 349, 'Under Armour', 'Men', 'Base_Layer', 20),
+(136, 'JORDAN 23 TECH', 'M', 'The Jordan 23 Tech Men''s Tank is made with light, stretchy fabric for premium comfort and side vents for natural mobility.', 120, 299, 'Nike', 'Men', 'Base_Layer', 20),
+(137, 'JORDAN 23 TECH', 'L', 'The Jordan 23 Tech Men''s Tank is made with light, stretchy fabric for premium comfort and side vents for natural mobility.', 120, 299, 'Nike', 'Men', 'Base_Layer', 20),
+(138, 'KYRIE ELITE PULLOVER', 'M', 'The Kyrie Elite Pullover Men''s Basketball Hoodie is made with thermal sweat-wicking fabric to help keep you warm and comfortable on the outdoor court. A dropped back hem enhances coverage, and ergonomic seams let you move naturally.', 310, 599, 'Nike', 'Men', 'Hoodies_and_Pullovers', 21),
+(139, 'KYRIE ELITE PULLOVER', 'S', 'The Kyrie Elite Pullover Men''s Basketball Hoodie is made with thermal sweat-wicking fabric to help keep you warm and comfortable on the outdoor court. A dropped back hem enhances coverage, and ergonomic seams let you move naturally.', 310, 599, 'Nike', 'Men', 'Hoodies_and_Pullovers', 10),
+(140, 'NIKE THERMA HYPER ELITE', 'M', 'The Nike Therma Hyper Elite Men''s Basketball Hoodie features thermal fabric with a water-repellent finish for breathable performance comfort on the outdoor court.', 321, 599, 'Nike', 'Men', 'Hoodies_and_Pullovers', 2),
+(141, 'NIKE THERMA HYPER ELITE', 'L', 'The Nike Therma Hyper Elite Men''s Basketball Hoodie features thermal fabric with a water-repellent finish for breathable performance comfort on the outdoor court.', 321, 599, 'Nike', 'Men', 'Hoodies_and_Pullovers', 33),
+(144, 'NIKE DRY ELEMENT', 'M', 'The Nike Dry Element Women''s Running Hoodie is designed with soft Dri-FIT fabric for incredible comfort and lasting warmth. Ergonomic seams help keep you moving naturally while you run.', 330, 499, 'Nike', 'Women', 'Hoodies_and_Pullovers', 14),
+(145, 'NIKE DRY ELEMENT', 'L', 'The Nike Dry Element Women''s Running Hoodie is designed with soft Dri-FIT fabric for incredible comfort and lasting warmth. Ergonomic seams help keep you moving naturally while you run.', 330, 499, 'Nike', 'Women', 'Hoodies_and_Pullovers', 4),
+(146, 'JORDAN JETER RE2PECT PULLOVER', 'M', 'The Jordan Jeter Re2pect Pullover Men''s Hoodie is designed with raglan sleeves and a soft cotton blend for natural range of motion and warmth.', 335, 499, 'Nike', 'Men', 'Hoodies_and_Pullovers', 25),
+(147, 'Men UA SC30 Top Gun II Hoodie', 'M', 'Midweight, durable cotton-blend fleece.', 460, 699, 'Under Armour', 'Men', 'Hoodies_and_Pullovers', 17),
+(148, 'Men UA SC30 Top Gun II Hoodie', 'L', 'Midweight, durable cotton-blend fleece.', 460, 699, 'Under Armour', 'Men', 'Hoodies_and_Pullovers', 7),
+(149, 'Men UA Sportstyle Anorak', 'M', 'UA Storm technology repels water without sacrificing breathability.', 430, 699, 'Under Armour', 'Men', 'Hoodies_and_Pullovers', 0),
+(150, 'Men UA Sportstyle Anorak', 'L', 'UA Storm technology repels water without sacrificing breathability.', 430, 699, 'Under Armour', 'Men', 'Hoodies_and_Pullovers', 10),
+(151, 'JORDAN LIFESTYLE HOODED DOWN', 'M', 'The Jordan Lifestyle Hooded Down Men''s Jacket features down fill for premium warmth and water-repellent fabric for protection from the elements.', 1099, 1699, 'Nike', 'Men', 'Jackets_and_Vests', 20),
+(152, 'JORDAN LIFESTYLE HOODED DOWN', 'L', 'The Jordan Lifestyle Hooded Down Men''s Jacket features down fill for premium warmth and water-repellent fabric for protection from the elements.', 1099, 1699, 'Nike', 'Men', 'Jackets_and_Vests', 20),
+(153, 'NIKE IMPOSSIBLY LIGHT', 'M', 'The Nike Impossibly Light Women''s Running Jacket is updated with nylon fabric that''s backed with acrylic for even greater resistance to wind and rain. The jacket packs into a pocket so you can shed it on the go.\r\n', 345, 599, 'Nike', 'Women', 'Jackets_and_Vests', 20),
+(154, 'NIKE IMPOSSIBLY LIGHT', 'L', 'The Nike Impossibly Light Women''s Running Jacket is updated with nylon fabric that''s backed with acrylic for even greater resistance to wind and rain. The jacket packs into a pocket so you can shed it on the go.\r\n', 345, 599, 'Nike', 'Women', 'Jackets_and_Vests', 20),
+(155, 'NIKELAB GYAKUSOU PACKABLE JACKET', 'M', 'The NikeLab Gyakusou Packable Women''s Running Jacket keeps you dry and moving freely with an ultra-lightweight design. A reflective print on each arm represents the distinct tattoos of Undercover founder and Gyakusou designer Jun Takahashi for a personal touch to this running staple.', 999, 1499, 'Nike', 'Women', 'Jackets_and_Vests', 0),
+(156, 'NIKELAB GYAKUSOU PACKABLE JACKET', 'L', 'The NikeLab Gyakusou Packable Women''s Running Jacket keeps you dry and moving freely with an ultra-lightweight design. A reflective print on each arm represents the distinct tattoos of Undercover founder and Gyakusou designer Jun Takahashi for a personal touch to this running staple.', 999, 1499, 'Nike', 'Women', 'Jackets_and_Vests', 10),
+(157, 'NIKE TECH KNIT WINDRUNNER', 'M', 'The Nike Tech Knit Windrunner Men''s Jacket reinvents the iconic track jacket with new Nike Tech Knit, an engineered, body-mapped fabric that delivers superior fit plus warmth and ventilation exactly where you need it for all-day comfort.', 1059, 1499, 'Nike', 'Men', 'Jackets_and_Vests', 20),
+(158, 'NIKE TECH KNIT WINDRUNNER', 'L', 'The Nike Tech Knit Windrunner Men''s Jacket reinvents the iconic track jacket with new Nike Tech Knit, an engineered, body-mapped fabric that delivers superior fit plus warmth and ventilation exactly where you need it for all-day comfort.', 1059, 1499, 'Nike', 'Men', 'Jackets_and_Vests', 20),
+(159, 'NIKECOURT WOVEN', 'M', 'The NikeCourt Woven Men''s Tennis Jacket is made with a mesh lining and back vent for increased airflow on the court. ', 222, 499, 'Nike', 'Men', 'Jackets_and_Vests', 20),
+(160, 'NIKECOURT WOVEN', 'L', 'The NikeCourt Woven Men''s Tennis Jacket is made with a mesh lining and back vent for increased airflow on the court. ', 222, 499, 'Nike', 'Men', 'Jackets_and_Vests', 20),
+(161, 'LIGHT DOWN JACKET', 'M', 'This lightweight men''s training jacket is built for cooler weather. Filled with cosy duck down to keep you warm, this jacket packs into a small pouch for easy transport. Features reflective details.', 389, 659, 'Adidas', 'Men', 'Jackets_and_Vests', 22),
+(162, 'LIGHT DOWN JACKET', 'L', 'This lightweight men''s training jacket is built for cooler weather. Filled with cosy duck down to keep you warm, this jacket packs into a small pouch for easy transport. Features reflective details.', 389, 659, 'Adidas', 'Men', 'Jackets_and_Vests', 12),
+(163, 'Women''s UA ColdGearr Infrared Kymera Jacket', 'M', 'UA Storm technology repels water without sacrificing breathability.', 1299, 2699, 'Under Armour', 'Women', 'Jackets_and_Vests', 20),
+(164, 'Women''s UA ColdGearr Infrared Kymera Jacket', 'L', 'UA Storm technology repels water without sacrificing breathability.', 1299, 2699, 'Under Armour', 'Women', 'Jackets_and_Vests', 20),
+(165, 'Women''s UA Mirror Printed Leggings', 'L', 'UA StudioLux fabric delivers relentless support with a super-soft luxurious feel.', 439, 749, 'Under Armour', 'Women', 'Pants_and_Tights', 20),
+(166, 'Men UA HeatGearr Armour Scope Compression Leggings', 'L', 'HeatGearr fabric, with all the benefits of UA Compression, comfortable enough to be worn all day.', 230, 499, 'Under Armour', 'Men', 'Pants_and_Tights', 20),
+(167, 'JORDAN AJ COMPRESSION THREE-QUARTER', 'L', 'The Jordan AJ Compression Three-Quarter Men''s Training Tights are made with tight-fitting, Dri-FIT fabric that moves with you for locked-in comfort and superb range of motion.', 170, 349, 'Nike', 'Men', 'Pants_and_Tights', 20),
+(168, 'JORDAN SEASONAL', 'S', 'SIZE QTY (1) ADD TO CARTCHECK OUT\r\nThe Jordan Seasonal Men''s Graphic Pants are made with soft French terry fabric for lightweight warmth.', 239, 499, 'Nike', 'Men', 'Pants_and_Tights', 2),
+(170, 'NIKE DRY SQUAD', 'M', 'The Nike Dry Squad Men''s Soccer Pants are designed for superb mobility and ease during practice and drills.', 125, 399, 'Nike', 'Men', 'Pants_and_Tights', 20),
+(171, 'NIKE FLEX KD', 'S', 'The Nike Flex KD Big Kids'' (Boys'') Basketball Pants feature a water-repellent finish on stretchy sweat-wicking fabric to help keep you dry and moving naturally on the court.', 142, 399, 'Nike', 'Children', 'Pants_and_Tights', 12),
+(172, 'ESS 3S WV PANT', 'S', 'ESS 3S WV PANT', 213, 399, 'Adidas', 'Men', 'Pants_and_Tights2', 20),
+(173, 'NIKE POWER LEGENDARY', 'L', 'The Nike Pro HyperWarm Women''s Training Tights feature warm, stretchy knit fabric that hugs your legs from hip to hem for a supportive, flattering fit.', 335, 699, 'Nike', 'Women', 'Pants_and_Tights', 20),
+(174, 'AIR JORDAN 9 RETRO', '8.5', 'Originally released in 1993, when everyone around the world wanted to be like Mike, the AJ 9 represented the globalization of the Air Jordan brand. Today, the Air Jordan 9 Retro Men''s Shoe honors MJ as an international icon with design details from around the world, along with the superior cushioning and comfort fans have come to expect from signature Jordan...', 878, 1399, 'NIke', 'Men', 'Shoes', 20),
+(175, 'AIR JORDAN 9 RETRO', '9', 'Originally released in 1993, when everyone around the world wanted to be like Mike, the AJ 9 represented the globalization of the Air Jordan brand. Today, the Air Jordan 9 Retro Men''s Shoe honors MJ as an international icon with design details from around the world, along with the superior cushioning and comfort fans have come to expect from signature Jordan...', 878, 1399, 'NIke', 'Men', 'Shoes', 20),
+(176, 'AIR JORDAN 9 RETRO', '9.5', 'Originally released in 1993, when everyone around the world wanted to be like Mike, the AJ 9 represented the globalization of the Air Jordan brand. Today, the Air Jordan 9 Retro Men''s Shoe honors MJ as an international icon with design details from around the world, along with the superior cushioning and comfort fans have come to expect from signature Jordan...', 878, 1399, 'NIke', 'Men', 'Shoes', 20),
+(177, 'AIR JORDAN 9 RETRO', '10', 'Originally released in 1993, when everyone around the world wanted to be like Mike, the AJ 9 represented the globalization of the Air Jordan brand. Today, the Air Jordan 9 Retro Men''s Shoe honors MJ as an international icon with design details from around the world, along with the superior cushioning and comfort fans have come to expect from signature Jordan...', 878, 1399, 'NIke', 'Men', 'Shoes', 20),
+(178, 'AIR JORDAN 9 RETRO', '10.5', 'Originally released in 1993, when everyone around the world wanted to be like Mike, the AJ 9 represented the globalization of the Air Jordan brand. Today, the Air Jordan 9 Retro Men''s Shoe honors MJ as an international icon with design details from around the world, along with the superior cushioning and comfort fans have come to expect from signature Jordan...', 878, 1399, 'NIke', 'Men', 'Shoes', 20),
+(179, 'AIR JORDAN 9 RETRO', '11', 'Originally released in 1993, when everyone around the world wanted to be like Mike, the AJ 9 represented the globalization of the Air Jordan brand. Today, the Air Jordan 9 Retro Men''s Shoe honors MJ as an international icon with design details from around the world, along with the superior cushioning and comfort fans have come to expect from signature Jordan...', 878, 1399, 'NIke', 'Men', 'Shoes', 20),
+(180, 'AIR JORDAN 9 RETRO', '11.5', 'Originally released in 1993, when everyone around the world wanted to be like Mike, the AJ 9 represented the globalization of the Air Jordan brand. Today, the Air Jordan 9 Retro Men''s Shoe honors MJ as an international icon with design details from around the world, along with the superior cushioning and comfort fans have come to expect from signature Jordan...', 878, 1399, 'NIke', 'Men', 'Shoes', 20),
+(181, 'AIR JORDAN 9 RETRO', '12', 'Originally released in 1993, when everyone around the world wanted to be like Mike, the AJ 9 represented the globalization of the Air Jordan brand. Today, the Air Jordan 9 Retro Men''s Shoe honors MJ as an international icon with design details from around the world, along with the superior cushioning and comfort fans have come to expect from signature Jordan...', 878, 1399, 'NIke', 'Men', 'Shoes', 20),
+(182, 'NIKE LUNAREPIC LOW FLYKNIT', '8.5', 'The Nike LunarEpic Low Flyknit Women''s Running Shoe is lightweight and breathable with targeted cushioning for a soft, effortless sensation underfoot.', 989, 1299, 'Nike', 'Women', 'Shoes', 20),
+(183, 'NIKE LUNAREPIC LOW FLYKNIT', '9', 'The Nike LunarEpic Low Flyknit Women''s Running Shoe is lightweight and breathable with targeted cushioning for a soft, effortless sensation underfoot.', 989, 1299, 'Nike', 'Women', 'Shoes', 20),
+(184, 'NIKE LUNAREPIC LOW FLYKNIT', '9.5', 'The Nike LunarEpic Low Flyknit Women''s Running Shoe is lightweight and breathable with targeted cushioning for a soft, effortless sensation underfoot.', 989, 1299, 'Nike', 'Women', 'Shoes', 20),
+(185, 'NIKE LUNAREPIC LOW FLYKNIT', '10', 'The Nike LunarEpic Low Flyknit Women''s Running Shoe is lightweight and breathable with targeted cushioning for a soft, effortless sensation underfoot.', 989, 1299, 'Nike', 'Women', 'Shoes', 20),
+(186, 'NIKE LUNAREPIC LOW FLYKNIT', '10.5', 'The Nike LunarEpic Low Flyknit Women''s Running Shoe is lightweight and breathable with targeted cushioning for a soft, effortless sensation underfoot.', 989, 1299, 'Nike', 'Women', 'Shoes', 20),
+(187, 'NIKE LUNAREPIC LOW FLYKNIT', '11', 'The Nike LunarEpic Low Flyknit Women''s Running Shoe is lightweight and breathable with targeted cushioning for a soft, effortless sensation underfoot.', 989, 1299, 'Nike', 'Women', 'Shoes', 20),
+(188, 'NIKE LUNAREPIC LOW FLYKNIT', '11.5', 'The Nike LunarEpic Low Flyknit Women''s Running Shoe is lightweight and breathable with targeted cushioning for a soft, effortless sensation underfoot.', 989, 1299, 'Nike', 'Women', 'Shoes', 20),
+(189, 'NIKE LUNAREPIC LOW FLYKNIT', '12', 'The Nike LunarEpic Low Flyknit Women''s Running Shoe is lightweight and breathable with targeted cushioning for a soft, effortless sensation underfoot.', 989, 1299, 'Nike', 'Women', 'Shoes', 20),
+(190, 'NIKE SOCK DART SE PREMIUM', '8.5', 'The Nike Sock Dart SE Premium Men''s Shoe takes a minimalist approach with a stretchy, lightweight woven upper designed for a comfortable feel and a streamlined look.', 598, 899, 'Nike', 'Men', 'Shoes', 20),
+(191, 'NIKE SOCK DART SE PREMIUM', '9', 'The Nike Sock Dart SE Premium Men''s Shoe takes a minimalist approach with a stretchy, lightweight woven upper designed for a comfortable feel and a streamlined look.', 598, 899, 'Nike', 'Men', 'Shoes', 20),
+(192, 'NIKE SOCK DART SE PREMIUM', '9.5', 'The Nike Sock Dart SE Premium Men''s Shoe takes a minimalist approach with a stretchy, lightweight woven upper designed for a comfortable feel and a streamlined look.', 598, 899, 'Nike', 'Men', 'Shoes', 20),
+(193, 'NIKE SOCK DART SE PREMIUM', '10', 'The Nike Sock Dart SE Premium Men''s Shoe takes a minimalist approach with a stretchy, lightweight woven upper designed for a comfortable feel and a streamlined look.', 598, 899, 'Nike', 'Men', 'Shoes', 20),
+(194, 'NIKE SOCK DART SE PREMIUM', '10.5', 'The Nike Sock Dart SE Premium Men''s Shoe takes a minimalist approach with a stretchy, lightweight woven upper designed for a comfortable feel and a streamlined look.', 598, 899, 'Nike', 'Men', 'Shoes', 20),
+(195, 'NIKE SOCK DART SE PREMIUM', '11', 'The Nike Sock Dart SE Premium Men''s Shoe takes a minimalist approach with a stretchy, lightweight woven upper designed for a comfortable feel and a streamlined look.', 598, 899, 'Nike', 'Men', 'Shoes', 20),
+(196, 'NIKE SOCK DART SE PREMIUM', '11.5', 'The Nike Sock Dart SE Premium Men''s Shoe takes a minimalist approach with a stretchy, lightweight woven upper designed for a comfortable feel and a streamlined look.', 598, 899, 'Nike', 'Men', 'Shoes', 20),
+(197, 'NIKE SOCK DART SE PREMIUM', '12', 'The Nike Sock Dart SE Premium Men''s Shoe takes a minimalist approach with a stretchy, lightweight woven upper designed for a comfortable feel and a streamlined look.', 598, 899, 'Nike', 'Men', 'Shoes', 20),
+(198, 'NIKE ROSHE TWO', '8.5', 'As light and flexible as the original, the Nike Roshe Two Men''s Shoe features triple-layer cushioning for a soft underfoot feel and a breathable, stretchy upper that conforms to your foot for a custom fit.', 454, 649, 'Nike', 'Men', 'Shoes', 20),
+(199, 'NIKE ROSHE TWO', '9', 'As light and flexible as the original, the Nike Roshe Two Men''s Shoe features triple-layer cushioning for a soft underfoot feel and a breathable, stretchy upper that conforms to your foot for a custom fit.', 454, 649, 'Nike', 'Men', 'Shoes', 20),
+(200, 'NIKE ROSHE TWO', '9.5', 'As light and flexible as the original, the Nike Roshe Two Men''s Shoe features triple-layer cushioning for a soft underfoot feel and a breathable, stretchy upper that conforms to your foot for a custom fit.', 454, 649, 'Nike', 'Men', 'Shoes', 20),
+(201, 'NIKE ROSHE TWO', '10', 'As light and flexible as the original, the Nike Roshe Two Men''s Shoe features triple-layer cushioning for a soft underfoot feel and a breathable, stretchy upper that conforms to your foot for a custom fit.', 454, 649, 'Nike', 'Men', 'Shoes', 20),
+(202, 'NIKE ROSHE TWO', '10.5', 'As light and flexible as the original, the Nike Roshe Two Men''s Shoe features triple-layer cushioning for a soft underfoot feel and a breathable, stretchy upper that conforms to your foot for a custom fit.', 454, 649, 'Nike', 'Men', 'Shoes', 20),
+(203, 'NIKE ROSHE TWO', '11', 'As light and flexible as the original, the Nike Roshe Two Men''s Shoe features triple-layer cushioning for a soft underfoot feel and a breathable, stretchy upper that conforms to your foot for a custom fit.', 454, 649, 'Nike', 'Men', 'Shoes', 20),
+(204, 'NIKE ROSHE TWO', '11.5', 'As light and flexible as the original, the Nike Roshe Two Men''s Shoe features triple-layer cushioning for a soft underfoot feel and a breathable, stretchy upper that conforms to your foot for a custom fit.', 454, 649, 'Nike', 'Men', 'Shoes', 20),
+(205, 'NIKE ROSHE TWO', '12', 'As light and flexible as the original, the Nike Roshe Two Men''s Shoe features triple-layer cushioning for a soft underfoot feel and a breathable, stretchy upper that conforms to your foot for a custom fit.', 454, 649, 'Nike', 'Men', 'Shoes', 20),
+(206, 'ENERGY BOOST 3 SHOES', '8.5', 'The shoes that redefined cushioning when they launched. These women''s shoes blend a flexible, adaptive techfitr upper with the plush, energy-filled ride of boostT. The result is a lightweight, neutral running shoe that will invigorate runners of every level, at any distance.', 572, 799, 'Adidas', 'Women', 'Shoes', 20),
+(207, 'ENERGY BOOST 3 SHOES', '9', 'The shoes that redefined cushioning when they launched. These women''s shoes blend a flexible, adaptive techfitr upper with the plush, energy-filled ride of boostT. The result is a lightweight, neutral running shoe that will invigorate runners of every level, at any distance.', 572, 799, 'Adidas', 'Women', 'Shoes', 20),
+(208, 'ENERGY BOOST 3 SHOES', '9.5', 'The shoes that redefined cushioning when they launched. These women''s shoes blend a flexible, adaptive techfitr upper with the plush, energy-filled ride of boostT. The result is a lightweight, neutral running shoe that will invigorate runners of every level, at any distance.', 572, 799, 'Adidas', 'Women', 'Shoes', 20),
+(209, 'ENERGY BOOST 3 SHOES', '10', 'The shoes that redefined cushioning when they launched. These women''s shoes blend a flexible, adaptive techfitr upper with the plush, energy-filled ride of boostT. The result is a lightweight, neutral running shoe that will invigorate runners of every level, at any distance.', 572, 799, 'Adidas', 'Women', 'Shoes', 20),
+(210, 'ENERGY BOOST 3 SHOES', '10.5', 'The shoes that redefined cushioning when they launched. These women''s shoes blend a flexible, adaptive techfitr upper with the plush, energy-filled ride of boostT. The result is a lightweight, neutral running shoe that will invigorate runners of every level, at any distance.', 572, 799, 'Adidas', 'Women', 'Shoes', 20),
+(211, 'ENERGY BOOST 3 SHOES', '11', 'The shoes that redefined cushioning when they launched. These women''s shoes blend a flexible, adaptive techfitr upper with the plush, energy-filled ride of boostT. The result is a lightweight, neutral running shoe that will invigorate runners of every level, at any distance.', 572, 799, 'Adidas', 'Women', 'Shoes', 20),
+(212, 'ENERGY BOOST 3 SHOES', '11.5', 'The shoes that redefined cushioning when they launched. These women''s shoes blend a flexible, adaptive techfitr upper with the plush, energy-filled ride of boostT. The result is a lightweight, neutral running shoe that will invigorate runners of every level, at any distance.', 572, 799, 'Adidas', 'Women', 'Shoes', 20),
+(213, 'ENERGY BOOST 3 SHOES', '12', 'The shoes that redefined cushioning when they launched. These women''s shoes blend a flexible, adaptive techfitr upper with the plush, energy-filled ride of boostT. The result is a lightweight, neutral running shoe that will invigorate runners of every level, at any distance.', 572, 799, 'Adidas', 'Women', 'Shoes', 20),
+(214, 'Women''s UA SpeedForm Fortis 2 TXTR Running Shoes', '8.5', 'Innovative UA SpeedForm technology delivers an unprecedented precision fit for unrivaled comfort & zero distraction.', 786, 999, 'Under Armour', 'Women', 'Shoes', 20),
+(215, 'Women''s UA SpeedForm Fortis 2 TXTR Running Shoes', '9', 'Innovative UA SpeedForm technology delivers an unprecedented precision fit for unrivaled comfort & zero distraction.', 786, 999, 'Under Armour', 'Women', 'Shoes', 20),
+(216, 'Women''s UA SpeedForm Fortis 2 TXTR Running Shoes', '9.5', 'Innovative UA SpeedForm technology delivers an unprecedented precision fit for unrivaled comfort & zero distraction.', 786, 999, 'Under Armour', 'Women', 'Shoes', 20),
+(217, 'Women''s UA SpeedForm Fortis 2 TXTR Running Shoes', '10', 'Innovative UA SpeedForm technology delivers an unprecedented precision fit for unrivaled comfort & zero distraction.', 786, 999, 'Under Armour', 'Women', 'Shoes', 20),
+(218, 'Women''s UA SpeedForm Fortis 2 TXTR Running Shoes', '10.5', 'Innovative UA SpeedForm technology delivers an unprecedented precision fit for unrivaled comfort & zero distraction.', 786, 999, 'Under Armour', 'Women', 'Shoes', 20),
+(219, 'Women''s UA SpeedForm Fortis 2 TXTR Running Shoes', '11', 'Innovative UA SpeedForm technology delivers an unprecedented precision fit for unrivaled comfort & zero distraction.', 786, 999, 'Under Armour', 'Women', 'Shoes', 20),
+(220, 'Women''s UA SpeedForm Fortis 2 TXTR Running Shoes', '11.5', 'Innovative UA SpeedForm technology delivers an unprecedented precision fit for unrivaled comfort & zero distraction.', 786, 999, 'Under Armour', 'Women', 'Shoes', 20),
+(221, 'Women''s UA SpeedForm Fortis 2 TXTR Running Shoes', '12', 'Innovative UA SpeedForm technology delivers an unprecedented precision fit for unrivaled comfort & zero distraction.', 786, 999, 'Under Armour', 'Women', 'Shoes', 20),
+(222, 'NIKE ELITE', 'M', 'The Nike Elite Men''s Basketball Shorts help keep you dry, comfortable and moving freely on the court with sweat-wicking fabric and vented hems.', 89, 299, 'NIke', 'Men', 'Shorts', 20),
+(223, 'NIKE ELITE', 'L', 'The Nike Elite Men''s Basketball Shorts help keep you dry, comfortable and moving freely on the court with sweat-wicking fabric and vented hems.', 89, 299, 'NIke', 'Men', 'Shorts', 20),
+(224, 'NIKE DRY TEMPO', 'M', 'The Nike Dry Tempo Big Kids'' (Girls'') Running Shorts combine mesh side insets with a curved hem for breathability and range of motion for all-day comfort.', 89, 179, 'Nike', 'Children', 'Shorts', 20),
+(225, 'NIKE DRY TEMPO', 'L', 'The Nike Dry Tempo Big Kids'' (Girls'') Running Shorts combine mesh side insets with a curved hem for breathability and range of motion for all-day comfort.', 89, 179, 'Nike', 'Children', 'Shorts', 20),
+(226, 'JORDAN 23 LUX', 'M', 'The Jordan 23 Lux Men''s Shorts combine soft jersey fabric and a wide elastic waistband for a comfortable fit that stays in place.', 299, 529, 'Nike', 'Men', 'Shorts', 20),
+(227, 'JORDAN 23 LUX', 'L', 'The Jordan 23 Lux Men''s Shorts combine soft jersey fabric and a wide elastic waistband for a comfortable fit that stays in place.', 299, 529, 'Nike', 'Men', 'Shorts', 20),
+(228, 'NIKECOURT PURE', 'M', 'The NikeCourt Pure Women''s Tennis Skirt is designed to help you move freely on the court with stretchy built-in shorts and super-soft Dri-FIT fabric.', 109, 259, 'Nike', 'Women', 'Skirts_and_Dresses', 20),
+(229, 'NIKECOURT PURE', 'L', 'The NikeCourt Pure Women''s Tennis Skirt is designed to help you move freely on the court with stretchy built-in shorts and super-soft Dri-FIT fabric.', 109, 259, 'Nike', 'Women', 'Skirts_and_Dresses', 20),
+(230, 'NIKECOURT FLEX VICTORY', 'M', 'The NikeCourt Flex Victory Women''s Tennis Skirt is made with stretchy, sweat-wicking fabric in a classic pleated profile to help keep you moving freely on the court.', 159, 499, 'Nike', 'Women', 'Skirts_and_Dresses', 20),
+(231, 'NIKECOURT FLEX VICTORY', 'L', 'The NikeCourt Flex Victory Women''s Tennis Skirt is made with stretchy, sweat-wicking fabric in a classic pleated profile to help keep you moving freely on the court.', 159, 499, 'Nike', 'Women', 'Skirts_and_Dresses', 20),
+(232, 'NIKE DRY SQUAD CREW', 'M', 'The Nike Dry Squad Crew Soccer Socks are made with sweat-wicking Dri-FIT fabric and zonal cushioning to provide performance comfort and impact protection on the field.', 29, 89, 'Nike', NULL, 'Socks', 20),
+(233, 'NIKE DRY SQUAD CREW', 'L', 'The Nike Dry Squad Crew Soccer Socks are made with sweat-wicking Dri-FIT fabric and zonal cushioning to provide performance comfort and impact protection on the field.', 29, 89, 'Nike', NULL, 'Socks', 20),
+(234, 'NIKE SHOE PARADISE CREW', 'M', 'The Nike Shoe Paradise Crew Basketball Socks (1 Pair) feature engineered yarn for optimal traction and zonal cushioning for performance comfort on the court.\r\n', 39, 109, 'Nike', NULL, 'Socks', 20),
+(235, 'NIKE SHOE PARADISE CREW', 'L', 'The Nike Shoe Paradise Crew Basketball Socks (1 Pair) feature engineered yarn for optimal traction and zonal cushioning for performance comfort on the court.\r\n', 39, 109, 'Nike', NULL, 'Socks', 20),
+(236, 'JORDAN JUMPMAN FLIGHT CREW', 'M', 'The Jordan Jumpman Flight Crew Socks are made with Dri-FIT fabric and ventilated mesh to help keep your feet cool and dry. Zonal cushioning provides plush comfort and impact protection.', 49, 109, 'Nike', NULL, 'Socks', 20),
+(237, 'JORDAN JUMPMAN FLIGHT CREW', 'L', 'The Jordan Jumpman Flight Crew Socks are made with Dri-FIT fabric and ventilated mesh to help keep your feet cool and dry. Zonal cushioning provides plush comfort and impact protection.', 49, 109, 'Nike', NULL, 'Socks', 20),
+(238, 'NIKE PRO HYPER CLASSIC PADDED', 'M', 'Designed for medium-impact activities like cycling, dance and cardio classes, the Nike Pro Hyper Classic Padded Women''s Medium Support Sports Bra lets you move freely while helping you feel secure and supported.', 119, 399, 'Nike', 'Women', 'Sports_Bras', 20),
+(239, 'NIKE PRO HYPER CLASSIC PADDED', 'L', 'Designed for medium-impact activities like cycling, dance and cardio classes, the Nike Pro Hyper Classic Padded Women''s Medium Support Sports Bra lets you move freely while helping you feel secure and supported.', 119, 399, 'Nike', 'Women', 'Sports_Bras', 20),
+(240, 'NIKE PRO RIVAL', 'M', 'The Nike Pro Rival Women''s High Support Sports Bra features a compression fit and knit fabric that reduces bounce during high-impact workouts like running, basketball and dance.', 189, 449, 'Nike', 'Women', 'Sports_Bras', 20),
+(241, 'NIKE PRO RIVAL', 'L', 'The Nike Pro Rival Women''s High Support Sports Bra features a compression fit and knit fabric that reduces bounce during high-impact workouts like running, basketball and dance.', 189, 449, 'Nike', 'Women', 'Sports_Bras', 20),
+(242, 'RB BRA PRINT 3', 'M', 'Fear no treadmill with this sports bra. With a maximum-support design for high-impact training, it has inner foam pads for extra shape, coverage and support. Made with recycled fibres, the bra features ventilating climacoolr and a mesh back that keep you cool and dry.', 149, 399, 'Adidas', 'Women', 'Sports_Bras', 20);
+INSERT INTO `inventory` (`ProductID`, `ProductName`, `Size`, `Description`, `Cost`, `SellPrice`, `Brand`, `Category1`, `Category2`, `Quantity`) VALUES
+(243, 'RB BRA PRINT 3', 'L', 'Fear no treadmill with this sports bra. With a maximum-support design for high-impact training, it has inner foam pads for extra shape, coverage and support. Made with recycled fibres, the bra features ventilating climacoolr and a mesh back that keep you cool and dry.', 149, 399, 'Adidas', 'Women', 'Sports_Bras', 20),
+(244, 'LIN YG BX', 'M', 'Laps in the pool await. These swim boxers for men are made in high-stretch, chlorine-resistant INFINITEXr DRIVE that''s soft and comfortable in and out of the pool. They have a secure tie-cord waist and wear close for less drag in the water.', 119, 250, 'Adidas', 'Men', 'Swimwear', 20),
+(245, 'LIN YG BX', 'L', 'Laps in the pool await. These swim boxers for men are made in high-stretch, chlorine-resistant INFINITEXr DRIVE that''s soft and comfortable in and out of the pool. They have a secure tie-cord waist and wear close for less drag in the water.', 119, 250, 'Adidas', 'Men', 'Swimwear', 20),
+(246, 'INF DY NEMO 1PC', 'M', 'Little girls will enjoy endless fun in the water or sun with this infants'' one-piece swimsuit. Designed with a flat neckline and thin shoulder straps, the front features a printed graphic depicting Disney''s popular underwater movie character, Dory.', 88, 139, 'Adidas', 'Children', 'Swimwear', 20),
+(247, 'INF DY NEMO 1PC', 'L', 'Little girls will enjoy endless fun in the water or sun with this infants'' one-piece swimsuit. Designed with a flat neckline and thin shoulder straps, the front features a printed graphic depicting Disney''s popular underwater movie character, Dory.', 88, 139, 'Adidas', 'Children', 'Swimwear', 20),
+(248, 'I 3S TANK', 'M', 'This women''s swimsuit combines support with a streamlined fit for serious training. The tankini has an inner mesh bra and is made of chlorine-resistant INFINITEXr fabric that keeps its elasticity and fit. With crisscross straps in back, a low neck and medium-cut legs for comfort and performance.', 109, 235, 'Adidas', 'Women', 'Swimwear', 20),
+(249, 'I 3S TANK', 'L', 'This women''s swimsuit combines support with a streamlined fit for serious training. The tankini has an inner mesh bra and is made of chlorine-resistant INFINITEXr fabric that keeps its elasticity and fit. With crisscross straps in back, a low neck and medium-cut legs for comfort and performance.', 109, 235, 'Adidas', 'Women', 'Swimwear', 20),
+(250, 'AIR JORDAN 1 BANNED', 'M', 'The Air Jordan 1 Banned Men''s T-Shirt is made with sweat-wicking fabric for lasting comfort.', 125, 269, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(251, 'AIR JORDAN 1 BANNED', 'L', 'The Air Jordan 1 Banned Men''s T-Shirt is made with sweat-wicking fabric for lasting comfort.', 125, 269, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(252, 'NIKE INTERNATIONAL SEASONAL', 'M', 'The Nike International Seasonal Men''s T-Shirt features allover print of Brazil at night on pure cotton for a premium look and comfortable feel.', 119, 229, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(253, 'NIKE INTERNATIONAL SEASONAL', 'L', 'The Nike International Seasonal Men''s T-Shirt features allover print of Brazil at night on pure cotton for a premium look and comfortable feel.', 119, 229, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(254, 'NIKE KOBE XXIV', 'M', 'The Nike Kobe XXIV Men''s Basketball T-Shirt honors an icon of the sport with signature graphics on soft Dri-FIT fabric.', 119, 269, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(255, 'NIKE KOBE XXIV', 'L', 'The Nike Kobe XXIV Men''s Basketball T-Shirt honors an icon of the sport with signature graphics on soft Dri-FIT fabric.', 119, 269, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(256, 'NIKE SPORTSWEAR', 'M', 'The Nike Sportswear Women''s Long Sleeve Top features an elongated silhouette for comfortable coverage.', 109, 299, 'Nike', 'Women', 'Tops_and_T-shirts', 20),
+(257, 'NIKE SPORTSWEAR', 'L', 'The Nike Sportswear Women''s Long Sleeve Top features an elongated silhouette for comfortable coverage.', 109, 299, 'Nike', 'Women', 'Tops_and_T-shirts', 20),
+(258, 'NIKE SPORTSWEAR SIGNAL', 'M', 'The Nike Sportswear Signal Women''s Top features graphics from Brooklyn artist Romon "Rostarr" Yang on super-soft cotton for total comfort.', 105, 229, 'Nike', 'Women', 'Tops_and_T-shirts', 20),
+(259, 'NIKE SPORTSWEAR SIGNAL', 'L', 'The Nike Sportswear Signal Women''s Top features graphics from Brooklyn artist Romon "Rostarr" Yang on super-soft cotton for total comfort.', 105, 229, 'Nike', 'Women', 'Tops_and_T-shirts', 20),
+(260, 'NIKE STRIKE AEROSWIFT', 'M', 'The ultralight Nike Strike Aeroswift Men''s 1/4 Zip Soccer Drill Top features Aeroswift technology, combining meticulous tailoring and the latest soccer innovations, helping you train comfortably at full speed.', 559, 899, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(261, 'NIKE STRIKE AEROSWIFT', 'L', 'The ultralight Nike Strike Aeroswift Men''s 1/4 Zip Soccer Drill Top features Aeroswift technology, combining meticulous tailoring and the latest soccer innovations, helping you train comfortably at full speed.', 559, 899, 'Nike', 'Men', 'Tops_and_T-shirts', 20),
+(262, 'HOODED JOGGER TRACK SUIT', 'M', 'This men''s training suit keeps your muscles warm while you work out or wind down. Made with an ultra-comfy French terry construction, the suit has a regular fit, and the hoodie features roomy kangaroo pockets.', 239, 389, 'Adidas', 'Men', 'Tracksuits', 20),
+(263, 'HOODED JOGGER TRACK SUIT', 'L', 'This men''s training suit keeps your muscles warm while you work out or wind down. Made with an ultra-comfy French terry construction, the suit has a regular fit, and the hoodie features roomy kangaroo pockets.', 239, 389, 'Adidas', 'Men', 'Tracksuits', 20),
+(264, 'SEPARATES TRACK SUIT', 'M', 'Hit the gym or field in this cosy, slim-fit track suit. It''s made of soft French terry designed to block the sun during training.', 499, 739, 'Adidas', 'Children', 'Tracksuits', 20),
+(265, 'SEPARATES TRACK SUIT', 'L', 'Hit the gym or field in this cosy, slim-fit track suit. It''s made of soft French terry designed to block the sun during training.', 499, 739, 'Adidas', 'Children', 'Tracksuits', 20),
+(266, 'ESSENTIALS TRACK SUIT', 'M', 'Two versatile adidas pieces, one winning athletic look. This kids'' Essentials Track Suit brings little ones a grown-up style, with contrasting 3-Stripes that coordinate the track pants with the full-zip track jacket.', 459, 699, 'Adidas', 'Children', 'Tracksuits', 20),
+(267, 'ESSENTIALS TRACK SUIT', 'L', 'Two versatile adidas pieces, one winning athletic look. This kids'' Essentials Track Suit brings little ones a grown-up style, with contrasting 3-Stripes that coordinate the track pants with the full-zip track jacket.', 459, 699, 'Adidas', 'Children', 'Tracksuits', 20),
+(268, 'TIGHTS-AND-HOODIE TRACK SUIT', 'M', 'A comfortable, colour-coordinated suit to get you to and from the gym. Made with moisture-wicking performance fabric, this women''s track suit draws sweat away from your skin to keep you comfortable. The jacket is cut for a feminine look, with slightly batwing sleeves.', 389, 599, 'Adidas', 'Women', 'Tracksuits', 20),
+(269, 'TIGHTS-AND-HOODIE TRACK SUIT', 'L', 'A comfortable, colour-coordinated suit to get you to and from the gym. Made with moisture-wicking performance fabric, this women''s track suit draws sweat away from your skin to keep you comfortable. The jacket is cut for a feminine look, with slightly batwing sleeves.', 389, 599, 'Adidas', 'Women', 'Tracksuits', 20),
+(270, 'BACK-TO-SCHOOL TRACK SUIT', 'S', 'Stay a step ahead of the elements when you train with this men''s track suit. Built with polyester tricot for comfort, it features tapered pants and plenty of pockets. An oversize "adidas" printed across the chest completes the look.', 399, 599, 'Adidas', 'Men', 'Tracksuits', 20),
+(271, 'BACK-TO-SCHOOL TRACK SUIT', 'M', 'Stay a step ahead of the elements when you train with this men''s track suit. Built with polyester tricot for comfort, it features tapered pants and plenty of pockets. An oversize "adidas" printed across the chest completes the look.', 399, 599, 'Adidas', 'Men', 'Tracksuits', 20),
+(272, 'BACK-TO-SCHOOL TRACK SUIT', 'L', 'Stay a step ahead of the elements when you train with this men''s track suit. Built with polyester tricot for comfort, it features tapered pants and plenty of pockets. An oversize "adidas" printed across the chest completes the look.', 399, 599, 'Adidas', 'Men', 'Tracksuits', 20),
+(273, 'RIBERIO TRACK SUIT', 'S', 'Built with cosy tricot, this men''s track suit ramps up the comfort. This suit pairs a jacket with raglan sleeves and ribbed cuffs with open-hemmed pants.', 599, 899, 'Adidas', 'Men', 'Tracksuits', 20),
+(274, 'RIBERIO TRACK SUIT', 'M', 'Built with cosy tricot, this men''s track suit ramps up the comfort. This suit pairs a jacket with raglan sleeves and ribbed cuffs with open-hemmed pants.', 599, 899, 'Adidas', 'Men', 'Tracksuits', 20),
+(275, 'RIBERIO TRACK SUIT', 'L', 'Built with cosy tricot, this men''s track suit ramps up the comfort. This suit pairs a jacket with raglan sleeves and ribbed cuffs with open-hemmed pants.', 599, 899, 'Adidas', 'Men', 'Tracksuits', 20),
+(279, 'GRAPHIC SWIMSUIT', 'S', 'Whether you''re a distance or sprint swimmer, this medium-cut women''s swimsuit gives you long-lasting wear. It stands up to chlorine and has extra stretch to hold its shape. The suit is designed with an open X-back and thin straps for unrestricted movement.', 110, 210, 'Adidas', 'Women', 'Swimwear', 20),
+(280, 'GRAPHIC SWIMSUIT', 'M', 'Whether you''re a distance or sprint swimmer, this medium-cut women''s swimsuit gives you long-lasting wear. It stands up to chlorine and has extra stretch to hold its shape. The suit is designed with an open X-back and thin straps for unrestricted movement.', 110, 210, 'Adidas', 'Women', 'Swimwear', 20),
+(281, 'GRAPHIC SWIMSUIT', 'L', 'Whether you''re a distance or sprint swimmer, this medium-cut women''s swimsuit gives you long-lasting wear. It stands up to chlorine and has extra stretch to hold its shape. The suit is designed with an open X-back and thin straps for unrestricted movement.', 110, 210, 'Adidas', 'Women', 'Swimwear', 20),
+(282, 'BEACH VOLLEYBALL WATER SHORTS', 'S', 'Dig, set and spike with these men''s volleyball swim shorts. They''re made with a lightweight fabric designed to stretch for ease of motion during every assist and attack. Side pockets and a front zip pocket hold small essentials.', 89, 159, 'Adidas', 'Men', 'Swimwear', 20),
+(283, 'BEACH VOLLEYBALL WATER SHORTS', 'M', 'Dig, set and spike with these men''s volleyball swim shorts. They''re made with a lightweight fabric designed to stretch for ease of motion during every assist and attack. Side pockets and a front zip pocket hold small essentials.', 89, 159, 'Adidas', 'Men', 'Swimwear', 20),
+(284, 'BEACH VOLLEYBALL WATER SHORTS', 'L', 'Dig, set and spike with these men''s volleyball swim shorts. They''re made with a lightweight fabric designed to stretch for ease of motion during every assist and attack. Side pockets and a front zip pocket hold small essentials.', 89, 159, 'Adidas', 'Men', 'Swimwear', 20),
+(285, 'ALLOVER PRINT BIKINI', 'S', 'Sporty and feminine, this bikini is built with a supportive padded wire on the top and plenty of stretch to hold its shape. The swimsuit features a bright allover graphic print with a contrast lining. The top has adjustable detachable straps and a cutout detail.', 79, 129, 'Adidas', 'Women', 'Swimwear', 20),
+(286, 'ALLOVER PRINT BIKINI', 'M', 'Sporty and feminine, this bikini is built with a supportive padded wire on the top and plenty of stretch to hold its shape. The swimsuit features a bright allover graphic print with a contrast lining. The top has adjustable detachable straps and a cutout detail.', 79, 129, 'Adidas', 'Women', 'Swimwear', 20),
+(287, 'ALLOVER PRINT BIKINI', 'L', 'Sporty and feminine, this bikini is built with a supportive padded wire on the top and plenty of stretch to hold its shape. The swimsuit features a bright allover graphic print with a contrast lining. The top has adjustable detachable straps and a cutout detail.', 79, 129, 'Adidas', 'Women', 'Swimwear', 20),
+(288, 'HYDROPASSION GOGGLES', 'N/A', 'The adidas Hydropassion One-Piece Goggles feature a sleek one-piece design and a soft seal. These goggles will give you comfort and protection while you swim.', 120, 200, 'Adidas', 'N/A', 'Swim_Accessories', 20),
+(289, 'AQUASTORM GOGGLES', 'N/A', 'The adidas Aquastorm One-Piece Goggles help you see all the way to the bottom of the pool with a streamlined design and a leak-proof, moulded seal. The head strap is adjustable on both sides for a perfect fit, and the nosepiece can be adjusted for a custom fit.', 109, 139, 'Adidas', 'N/A', 'Swim_Accessories', 20),
+(290, 'ADIDAS SWIM KIDS PACKAGE', 'N/A', 'A go-to for kids who live at the pool, this swim cap and goggle set will keep them in the fast lane. It features a reliable silicone cap with adidas graphics and colour-matched goggles. The kid-specific goggles have adjustable straps for a comfortable, secure fit.', 119, 149, 'Adidas', 'N/A', 'Swim_Accessories', 20),
+(291, 'JORDAN ICE CREAM PACK', 'S', 'Part of the Sundae League Collection, The Jordan Ice Cream Pack Socks celebrate sunny-day sweets and summer hoops with a unique graphic on a soft cotton blend.', 39, 79, 'Nike', 'N/A', 'Socks', 20),
+(292, 'JORDAN ICE CREAM PACK', 'M', 'Part of the Sundae League Collection, The Jordan Ice Cream Pack Socks celebrate sunny-day sweets and summer hoops with a unique graphic on a soft cotton blend.', 39, 79, 'Nike', 'N/A', 'Socks', 20),
+(293, 'JORDAN ICE CREAM PACK', 'L', 'Part of the Sundae League Collection, The Jordan Ice Cream Pack Socks celebrate sunny-day sweets and summer hoops with a unique graphic on a soft cotton blend.', 39, 79, 'Nike', 'N/A', 'Socks', 20),
+(294, 'NIKE CUSHION DYNAMIC ARCH NO-SHOW', 'S', 'Made with stretch fabric that helps keep sweat at bay, the Nike Cushion Dynamic Arch No-Show Running Socks (1 Pair) offer impact protection and a compression fit.', 39, 59, 'Nike', 'N/A', 'Socks', 20),
+(295, 'NIKE CUSHION DYNAMIC ARCH NO-SHOW', 'M', 'Made with stretch fabric that helps keep sweat at bay, the Nike Cushion Dynamic Arch No-Show Running Socks (1 Pair) offer impact protection and a compression fit.', 39, 59, 'Nike', 'N/A', 'Socks', 20),
+(296, 'NIKE CUSHION DYNAMIC ARCH NO-SHOW', 'L', 'Made with stretch fabric that helps keep sweat at bay, the Nike Cushion Dynamic Arch No-Show Running Socks (1 Pair) offer impact protection and a compression fit.', 39, 59, 'Nike', 'N/A', 'Socks', 20),
+(297, 'NIKE ELITE LIGHTWEIGHT NO-SHOW TAB', 'S', 'The Nike Elite Lightweight No-Show Tab Running Socks (1 Pair) are designed with ventilated Dri-FIT fabric and arch compression for breathable comfort and snug support.', 49, 99, 'Nike', 'N/A', 'Socks', 20),
+(298, 'NIKE ELITE LIGHTWEIGHT NO-SHOW TAB', 'M', 'The Nike Elite Lightweight No-Show Tab Running Socks (1 Pair) are designed with ventilated Dri-FIT fabric and arch compression for breathable comfort and snug support.', 49, 99, 'Nike', 'N/A', 'Socks', 20),
+(299, 'NIKE ELITE LIGHTWEIGHT NO-SHOW TAB', 'L', 'The Nike Elite Lightweight No-Show Tab Running Socks (1 Pair) are designed with ventilated Dri-FIT fabric and arch compression for breathable comfort and snug support.', 49, 99, 'Nike', 'N/A', 'Socks', 20),
+(300, 'NIKE PRO RIVAL RACERBACK', 'S', 'The Nike Pro Rival Racerback Women''s High Support Bra is designed with a compression fit and knit fabric that reduces bounce. A racerback offers natural range of motion during high-impact work outs.', 119, 159, 'Nike', 'Women', 'Sports_Bras', 20),
+(301, 'NIKE PRO RIVAL RACERBACK', 'M', 'The Nike Pro Rival Racerback Women''s High Support Bra is designed with a compression fit and knit fabric that reduces bounce. A racerback offers natural range of motion during high-impact work outs.', 119, 159, 'Nike', 'Women', 'Sports_Bras', 20),
+(302, 'NIKE PRO RIVAL RACERBACK', 'L', 'The Nike Pro Rival Racerback Women''s High Support Bra is designed with a compression fit and knit fabric that reduces bounce. A racerback offers natural range of motion during high-impact work outs.', 119, 159, 'Nike', 'Women', 'Sports_Bras', 20);
+
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('1000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('1000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('1000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('1000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('1000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('1000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('1000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('1000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('1000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('1000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('5000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('5000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('5000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('5000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('5000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('5000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('5000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('5000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('5000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('5000', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('500', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('500', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('500', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('500', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('500', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('500', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('500', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('500', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('500', (SELECT UUID()), 'NotUse');
+INSERT INTO `UUID`(`Cost`, `UUID`, `Status`) VALUES ('500', (SELECT UUID()), 'NotUse');
+
+
+ALTER TABLE `address`
+  ADD PRIMARY KEY (`AddressID`),
+  ADD KEY `CustomerID` (`CustomerID`);
+  
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`CustomerID`);
+
+ALTER TABLE `delivery`
+  ADD PRIMARY KEY (`DeliveryID`);
+  
+ALTER TABLE `inventory`
+  ADD PRIMARY KEY (`ProductID`),
+  ADD KEY `ProductName` (`ProductName`);
+  
+ALTER TABLE `login`
+  ADD PRIMARY KEY (`UserName`),
+  ADD KEY `CustomerID` (`CustomerID`);
+
+ALTER TABLE `orderedproduct`
+  ADD KEY `OrdersID` (`OrdersID`),
+  ADD KEY `ProductID` (`ProductID`);  
+
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`OrdersID`),
+  ADD KEY `CustomerID` (`CustomerID`),
+  ADD KEY `DeliveryID` (`DeliveryID`);
+  
+ALTER TABLE `productimg`
+  ADD KEY `ProductName` (`ProductName`);
+
+
+ALTER TABLE `address`
+  MODIFY `AddressID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+ALTER TABLE `customer`
+  MODIFY `CustomerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+ALTER TABLE `delivery`
+  MODIFY `DeliveryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+ALTER TABLE `inventory`
+  MODIFY `ProductID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=270;
+
+ALTER TABLE `orders`
+  MODIFY `OrdersID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;  
+
+
+  
+ALTER TABLE `address`
+  ADD CONSTRAINT `address_ibfk_1` FOREIGN KEY (`CustomerID`) REFERENCES `customer` (`CustomerID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `login`
+  ADD CONSTRAINT `login_ibfk_1` FOREIGN KEY (`CustomerID`) REFERENCES `customer` (`CustomerID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+ALTER TABLE `orderedproduct`
+  ADD CONSTRAINT `orderedproduct_ibfk_1` FOREIGN KEY (`OrdersID`) REFERENCES `orders` (`OrdersID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orderedproduct_ibfk_2` FOREIGN KEY (`ProductID`) REFERENCES `inventory` (`ProductID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`CustomerID`) REFERENCES `customer` (`CustomerID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`DeliveryID`) REFERENCES `delivery` (`DeliveryID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `productimg`
+  ADD FOREIGN KEY (`ProductName`) REFERENCES `inventory` (`ProductName`) ON DELETE CASCADE ON UPDATE CASCADE;

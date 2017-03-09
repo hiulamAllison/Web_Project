@@ -1,0 +1,115 @@
+
+<html>
+    <head><title>Update Delivery Address</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<Link href="style.css" type="text/css" rel="stylesheet">
+<Link href="style_delivery.css" type="text/css" rel="stylesheet">
+    <style>
+       
+
+  .red {color: red; font-style: italic;}
+.text{font-size: 20px;}
+.error {color:#F08080;
+font-family: Arial, Helvetica, sans-serif;}
+
+input[type=text], select {
+    width: 30%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=password], select {
+    width: 30%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 20%;
+    background-color: lightblue;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+input[type=submit]:hover {
+    background-color: lightgrey;
+}
+    </style>
+<script src="validate.js" type="text/javascript"></script>
+	
+	</head>
+    
+        <body background="images/pgbg.gif" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table width="770" height="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="25" align="left" valign="top">&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" bgcolor="#FFFFFF"><table width="755" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td height="75" align="center" valign="middle"><table width="720" border="0" cellspacing="0" cellpadding="0">
+              <tr> 
+                <td width="475" height="30" align="left" valign="middle" class="caption">Sportilife
+                  <font color="9F1E30">SHOP</font></td>
+              </tr>
+			  <tr> 
+                <td width="475" height="30" align="center" valign="middle" class="caption">Update Delivery Address</td>
+              </tr>
+            
+
+
+            <tr>
+              <td height="32" align="center" valign="middle" background=""><table width="750" border="0" cellspacing="0" cellpadding="0">
+              <tr align="center" valign="middle">
+
+			   <p><span class="error">* required field.</span></p>
+
+<form name="address_form" method="post" action="delivery_updateAddress.php" onsubmit="return validate(this)">
+	*Room: <input type="text" name="Room" value="">
+  <span id="#invalid_Room" class="invalid_1"></span>
+  <br><br>
+  
+   *Building: <input type="text" name="Building" value="">
+  <span id="#invalid_Buliding" class="invalid_1"></span>
+  <br><br>
+  
+  *Street: <input type="text" name="Street" value="">
+  <span id="#invalid_Street" class="invalid_1"></span>
+  <br><br>
+  
+  *Region: <input type="text" name="Region" value="">
+  <span id="#invalid_Region" class="invalid_1"></span>
+  <br><br>
+  
+  *City: <input type="text" name="City" value="">
+  <span id="#invalid_City" class="invalid_1"></span>
+  <br><br>
+  
+  *Country: <input type="text" name="Country" value="">
+  <span id="#invalid_Country" class="invalid_1"></span>
+  <br><br>
+  
+  <input type="submit" name="edit" value="Submit">  
+</form>
+  </tr>      </table></td>
+            </tr>
+    </body>
+ </html>
+
+
+
+
+
